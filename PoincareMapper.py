@@ -31,17 +31,19 @@ class PoincareMapper:
                 nearestPoint = self.projection(x1,x2)
                 values.append(self.matrix.dot(nearestPoint))
         return np.asarray(values)
-rho = 26.0
-sigma = 10.0
-beta = 8.0 / 3.0
+
+a = 0.1
+b = 0.1
+c = 14
+
 def f(state, t):
   x, y, z = state  # unpack the state vector
-  return sigma * (y - x), x * (rho - z) - y, x * y - beta * z  # derivatives
+  return -y-z, x+a*y,b+z*(x-c) # derivatives
 state0 = [1.0, 1.0, 1.0]
 t = np.arange(0.0, 40.0, 0.01)
 states = odeint(f, state0, t)
 
-mapper = PoincareMapper(np.array([0,1,0]),states)
+mapper = PoincareMapper(np.array([0.4,1,1]),states)
 values = mapper.map()
 print(values)
 plt.plot(values[:,0],values[:,1],'o')

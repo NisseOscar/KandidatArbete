@@ -19,9 +19,10 @@ state0 = [1.0, 1.0, 1.0]
 t = np.arange(0.0, 400.0, 0.01)
 states = odeint(f, state0, t)
 
+
 fig = plt.figure()
 ax = fig.gca(projection ='3d')
-ax.plot(states[:,0], states[:,1], states[:,2],'r-',alpha = 0.6)
+ax.plot(states[:,0], states[:,1], states[:,2],'-b',alpha = 0.6)
 ax.grid(True)
 ax.axes.get_yaxis().set_visible(False)
 ax.axes.get_xaxis().set_visible(False)

@@ -16,7 +16,7 @@ def f(state, t):
   return sigma * (y - x), x * (rho - z) - y, x * y - beta * z  # derivatives
 
 state0 = [1.0, 1.0, 1.0]
-t = np.arange(0.0, 400.0, 0.01)
+t = np.arange(0.0, 40.0, 0.01)
 states = odeint(f, state0, t)
 
 fig = plt.figure()
@@ -32,6 +32,6 @@ z = z[np.nonzero(z)]
 z1 = z[:-1]
 z2 = z[1:]
 
-plt.plot(z1,z2,'ro')
+plt.plot(z1,z2,'bo')
 plt.plot()
 plt.show()
