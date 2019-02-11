@@ -16,7 +16,7 @@ def f(state, t):
   return -y-z, x+a*y,b+z*(x-c) # derivatives
 
 state0 = [1.0, 1.0, 1.0]
-t = np.arange(0.0, 400.0, 0.01)
+t = np.arange(0.0, 200.0, 0.01)
 states = odeint(f, state0, t)
 
 
