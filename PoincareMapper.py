@@ -6,6 +6,8 @@ from scipy.integrate import odeint
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import signal
 from scipy.optimize import newton
+from scipy.interpolate import splprep as spl
+from scipy.interpolate import splev
 
 class PoincareMapper:
     def __init__(self,plane,array,t):
@@ -24,26 +26,50 @@ class PoincareMapper:
     def crossing(self,x1,x2):
         return np.dot(x1,self.plane)*np.dot(x2,self.plane)<0
 
-    # Single interpolation
-    def projection(self,x1,x2):
-        d1 = np.dot(x1,self.plane)
-        d2 = np.dot(x2,self.plane)
-        return (d1*x1+d2*x2)/(d1+d2)
+    # distance to plane of a point
+    def disPlan(self,x):
+        return np.dot(x,self.plane)
 
     # Maps points interpolated from the data
     def map(self):
         values = []
         #Specify direction
         direction = 1
-        for i in range(len(self.array)-1):
+        # 2 to minus 4 for interpolation
+        for i in range(2,len(self.array)-4):
             x1 = self.array[i]
             x2 = self.array[i+1]
             if(self.crossing(x1,x2)) and (np.dot(self.plane,x1)*direction > 0):
                 #Interpolate nearest point
-                nearestPoint = self.projection(x1,x2)
+                nearestPoint = self.interpolate(self.array[i-2:i+3])
                 #Add to values
                 values.append(nearestPoint)
         return np.asarray(values)
+
+    #Calculate which 5 points of the crossing that are the closest
+    def closestPoints(self,points):
+        if( self.disPlan(points[0])<self.disPlan(points[-1])):
+            return points[0:-2]
+        else
+            return points[1:-1]
+
+    #Interpolate by the 5th order
+    def interplote(self, crossingPoints):
+        points = self.closestPoints(crossingPoints)
+        spline = spl(points,k=5)
+        # two approaches one iterating over the expected values, and one
+        curve = splev(spline[0],spline[1])
+        min = self.disPlan(cuve[0])
+        for point in curve:
+            if(min>self.disPlane(point)):
+                min = point
+        return point
+        #function of the distance to the plane you can iterate over
+        splinefunc = np.poly1d(spline[1])
+        def proCurve(t):
+            return np.dot(self.plane,splinefunc(t))
+        newton(proCurve,0,maxiter=10000)
+
 
     def fourthOrderInterpolation(self,points, t, normalVector, nCrossing):
         # points is a matrix with the points represented as column vectors
@@ -96,12 +122,12 @@ class PoincareMapper:
                 nCrossing = 0
                 # Choose the fifth point (assumes a fairly even distibution of points)
                 if np.dot(self.plane,self.array[i-2])<np.dot(self.plane,self.array[i+3]):
-                    points = np.array([self.array[i-2], self.array[i-1], self.array[i], self.array[i+1], self.array[i+2]])
-                    tOfPoints = np.array([self.t[i-2], self.t[i-1], self.t[i], self.t[i+1], self.t[i+2]])
+                    points = self.array[i-2:i+2]
+                    tOfPoints = self.array[i-2:i+2]
                     nCrossing = 3
                 else:
-                    points = np.array([self.array[i-1], self.array[i], self.array[i+1], self.array[i+2], self.array[i+3]])
-                    tOfPoints = np.array([self.t[i-1], self.t[i], self.t[i+1], self.t[i+2], self.t[i+3]])
+                    points = self.array[i-1:i+3]
+                    tOfPoints = self.array[i-1:i+3]
                     nCrossing = 2
                 values.append(self.fourthOrderInterpolation(points,tOfPoints,self.plane,nCrossing))
         return np.asarray(values)
