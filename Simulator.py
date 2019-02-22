@@ -23,7 +23,7 @@ class Simulator:
         states = self.states
         fig = plt.figure()
         ax = fig.gca(projection ='3d')
-        ax.plot(states[:,dim[0]], states[:,dim[1]], states[:,dim[2]])
+        ax.plot(states[:,dim[0]], states[:,dim[1]], states[:,dim[2]],linewidth=0.5,alpha = 0.9)
         #ax.plot(t,self.states[:,2])
         plt.show()
     def twodimplot(self,dim = [0,1]):
@@ -36,10 +36,13 @@ class Simulator:
         if self.states is None:
             self.states()
         states = self.states
-        plt.plot(self.t,states[:,dim[0]])
+        plt.plot(self.t,states[:,dim[0]],alpha = 0.3)
         plt.show()
-
-eq = Equation.Fitz()
-sim = Simulator(eq,init = eq.inCond())
-state = sim.states(4000,0.01)
-sim.onedimplot(dim = [1])
+    def saveData(self):
+        if self.states is None:
+            self.states()
+        np.savetxt("data.txt",self.states)
+eq = Equation.Rossler()
+sim = Simulator(function = eq,init = [1.0,8,1.0])
+state = sim.states(600,0.01)
+sim.saveData()
