@@ -15,8 +15,7 @@ class Simulator:
 
     def states(self,duration,split):
         self.t = np.arange(0.0, duration, split)
-        #self.states = odeint(self.function.f, self.state0, self.t) # Choose integrator
-        self.states = solve_ivp(self.function,[0, duration],self.state0,method='RK45',t_eval=self.t) # RK45, 4th order, 5th order error estimation
+        self.states = solve_ivp(self.function.f,[0, duration],self.state0,method='RK45',t_eval=self.t) # RK45, 4th order, 5th order error estimation, without t_eval we get large distances between the points
         return self.states
 
     def tredimplot(self,dim = [0,1,2]):
@@ -41,7 +40,7 @@ class Simulator:
         plt.plot(self.t,states[:,dim[0]],alpha = 0.3)
         plt.show()
     def storeData(self,filename):
-        np.savetxt(filename+'Values.txt',self.states)
+        np.savetxt(filename+'Values.txt',self.states.y)
         np.savetxt(filename+'Time.txt',self.t)
     def loadData(self,filename):
         self.states = np.loadtxt(filename+'Values.txt')

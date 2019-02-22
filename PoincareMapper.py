@@ -36,8 +36,8 @@ class PoincareMapper:
         #Specify direction
         direction = 1
         for i in range(len(self.array)-1):
-            x1 = self.array[i]
-            x2 = self.array[i+1]
+            x1 = self.array[:,i]
+            x2 = self.array[:,i+1]
             if(self.crossing(x1,x2)) and (np.dot(self.plane,x1)*direction > 0):
                 #Interpolate nearest point
                 nearestPoint = self.projection(x1,x2)
@@ -87,8 +87,8 @@ class PoincareMapper:
         values = []
         direction = 1
         for i in range(len(self.array)-1):
-            x1 = self.array[i]
-            x2 = self.array[i+1]
+            x1 = self.array[:,i]
+            x2 = self.array[:,i+1]
             if(self.crossing(x1,x2)) and (np.dot(self.plane,x1)*direction > 0):
                 #nearestPoint = self.projection(x1,x2)
                 points = []
