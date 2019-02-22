@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import signal
+from scipy.integrate import solve_ivp
 import Equation
 
 class Simulator:
@@ -14,7 +15,8 @@ class Simulator:
 
     def states(self,duration,split):
         self.t = np.arange(0.0, duration, split)
-        self.states = odeint(self.function.f, self.state0, self.t)
+        self.states = odeint(self.function.f, self.state0, self.t) # Choose integrator
+        #self.states = solve_ivp(self.function,[0, duration],self.state0,method='RK45',t_eval=self.t) # RK45, 4th order, 5th order error estimation
         return self.states
 
     def tredimplot(self,dim = [0,1,2]):
@@ -38,8 +40,14 @@ class Simulator:
         states = self.states
         plt.plot(self.t,states[:,dim[0]])
         plt.show()
+    def storeData(self,filename):
+        np.savetxt(filename+'Values.txt',self.states)
+        np.savetxt(filename+'Time.txt',self.t)
+    def loadData(self,filename):
+        self.states = np.loadtxt(filename+'Values.txt')
+        self.t = np.loadtxt(filename+'Time.txt')
 
-eq = Equation.Fitz()
-sim = Simulator(eq,init = eq.inCond())
-state = sim.states(4000,0.01)
-sim.onedimplot(dim = [1])
+#eq = Equation.Fitz()
+#sim = Simulator(eq,init = eq.inCond())
+#state = sim.states(4000,0.01)
+#sim.onedimplot(dim = [1])
