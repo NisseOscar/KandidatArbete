@@ -10,16 +10,16 @@ from scipy.interpolate import splprep as spl
 from scipy.interpolate import splev
 
 class PoincareMapper:
-    def __init__(self,plane,array):
+    # Initiate with plane normal and data array
+    def __init__(self,plane,array, direction = 1):
         self.array = array
-        self.plane = plane
-        # Genarilze to more dimensions
-        u1 = np.array([-plane[1],1,0])
-        v2 = np.array([-plane[2],0,1])
-        e1 = np.linalg.norm(u1)*u1
-        u2 = v2 - np.dot(u1,v2)/np.dot(u1,u1)*u1
-        e2 = np.linalg.norm(u2)*u2
-        self.matrix = np.array([e1,e2])
+        # The normal of the plane, in case of 3 dimensions, goes through origo.
+        self.plane = plane/np.linalg.norm(plane)
+        vec = self.plane[np.newaxis, :]
+        self.proMatrix = np.identity(len(plane))-np.matmul(vec.T,vec)
+        # Specify direction of intersection
+        self.direction = direction
+        self.map()
 
     #Decide if 2 points are crossing
     def crossing(self,x1,x2):
@@ -31,10 +31,7 @@ class PoincareMapper:
 
     # Maps points interpolated from the data
     def map(self):
-        values = []
-        #Specify direction
-        direction = 1
-        # 2 to minus 4 for interpolation
+        self.values = []
         for i in range(2,len(self.array)-4):
             x1 = self.array[i]
             x2 = self.array[i+1]
@@ -42,14 +39,14 @@ class PoincareMapper:
                 #Interpolate nearest point
                 nearestPoint = self.interpolate(self.array[i-2:i+4])
                 #Add to values
-                values.append(nearestPoint)
+                self.values.append(nearestPoint)
         fig = plt.figure()
         ax = fig.gca(projection ='3d')
         x = np.array(values).transpose()
         ax.plot(self.array[0],self.array[1],self.array[2],'o',linewidth=0.5,alpha = 0.9)
         ax.plot(x[0],x[1],x[2],'or',linewidth=0.5,alpha = 0.9)
         plt.show()
-        return np.asarray(values)
+        return np.asarray(self.values)
 
     #Calculate which 5 points of the crossing that are the closest
     def closestPoints(self,points):
@@ -64,7 +61,8 @@ class PoincareMapper:
         points = self.closestPoints(crossingPoints)
         points = points.transpose()
         tck,u = spl(points,k=5)
-        # two approaches one iterating over the expected values, and one
+        # From our splines we calculate the approximate vactor and iterate to the closest point.
+        # Could be done through newton raphosdy, not sure.
         curve = splev(np.linspace(0,1,1000),tck)
         curve = np.array(curve).transpose()
         min = self.disPlan(curve[0])
@@ -73,3 +71,9 @@ class PoincareMapper:
             if(min>self.disPlan(point)):
                 min = tmp
         return point
+
+    def getValues(self):
+        return self.values.copy()
+
+    def get planeProjection():
+        self.values
