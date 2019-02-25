@@ -3,7 +3,7 @@ import numpy as np
 
 class function(ABC):
     @abstractmethod
-    def f(self,t):
+    def f(self,t,state):
         pass
 
 
@@ -14,8 +14,8 @@ class Lorentz(function):
         self.sigma = values[1]
         self.beta = values[2]
 
-    def f(self,state, t):
-        x, y, z = state  # unpack the state vector
+    def f(self,t,state):
+        x,y,z = state
         return self.sigma * (y - x), x * (self.rho - z) - y, x * y - self.beta * z  # derivatives
 
     def inCond(self):
@@ -31,7 +31,7 @@ class Rossler(function):
         self.b = values[1]
         self.c = values[2]
 
-    def f(self,state, t):
+    def f(self,t,state):
       x, y, z = state  # unpack the state vector
       return -y-z, x+self.a*y,self.b+z*(x-self.c) # derivatives
 
@@ -57,7 +57,7 @@ class Fitz(function):
         if(b is None):
             self.b = np.linspace(0.0065,0.0135,n)
 
-    def f(self,state, t):
+    def f(self,t,state):
       x = state[0:self.n]
       y = state[self.n:2*self.n]# unpack the state vector
       x = x*(self.a-x)*(x-1)-y+self.k*np.matmul(np.transpose(self.A)-self.A,x)
