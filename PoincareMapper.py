@@ -11,8 +11,8 @@ from scipy.interpolate import splev
 
 class PoincareMapper:
     # Initiate with plane normal and data array
-    def __init__(self,plane,array, direction = 1):
-        self.array = array
+    def __init__(self,plane,data, direction = 1):
+        self.data = data
         # The normal of the plane, in case of 3 dimensions, goes through origo.
         self.plane = plane/np.linalg.norm(plane)
         vec = self.plane[np.newaxis, :]
@@ -32,20 +32,14 @@ class PoincareMapper:
     # Maps points interpolated from the data
     def map(self):
         self.values = []
-        for i in range(2,len(self.array)-4):
-            x1 = self.array[i]
-            x2 = self.array[i+1]
-            if(self.crossing(x1,x2) and (np.dot(self.plane,x1)*direction > 0)):
+        for i in range(2,len(self.data)-4):
+            x1 = self.data[i]
+            x2 = self.data[i+1]
+            if(self.crossing(x1,x2) and (np.dot(self.plane,x1)*self.direction > 0)):
                 #Interpolate nearest point
-                nearestPoint = self.interpolate(self.array[i-2:i+4])
+                nearestPoint = self.interpolate(self.data[i-2:i+4])
                 #Add to values
                 self.values.append(nearestPoint)
-        fig = plt.figure()
-        ax = fig.gca(projection ='3d')
-        x = np.array(values).transpose()
-        ax.plot(self.array[0],self.array[1],self.array[2],'o',linewidth=0.5,alpha = 0.9)
-        ax.plot(x[0],x[1],x[2],'or',linewidth=0.5,alpha = 0.9)
-        plt.show()
         return np.asarray(self.values)
 
     #Calculate which 5 points of the crossing that are the closest
@@ -75,5 +69,12 @@ class PoincareMapper:
     def getValues(self):
         return self.values.copy()
 
-    def get planeProjection():
-        self.values
+    def planePoints(self):
+        [Q,R] = np.linalg.qr(self.proMatrix)
+        return np.matmul(Q,np.matrix(self.values).T)
+
+    def iterationdifference(self,func = np.linalg.norm):
+        amplitude = []
+        for vec in self.values:
+            amplitude.append(func(vec))
+        return [amplitude[0:-1],amplitude[1:]]
