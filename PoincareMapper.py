@@ -69,8 +69,12 @@ class PoincareMapper:
     def getValues(self):
         return self.values.copy()
 
+    def getPlaneNorm(self):
+        return self.plane.copy()
+
     def planePoints(self):
         [Q,R] = np.linalg.qr(self.proMatrix)
+        print(Q)
         return np.matmul(Q,np.matrix(self.values).T)
 
     def iterationdifference(self,func = np.linalg.norm):
