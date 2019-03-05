@@ -15,37 +15,37 @@ class Simulator:
     def states(self,duration=40,split=0.01):
         self.t = np.arange(0.0, duration, split)
         tmp = solve_ivp(self.function.f,[0, duration],self.state0,method='RK45',t_eval=self.t) # RK45, 4th order, 5th order error estimation, without t_eval we get large distances between the points
-        self.states =  tmp.y
+        self.data =  tmp.y
         #Return the transpose array of points
-        return np.array(self.states).transpose()
+        return np.array(self.data).transpose()
 
     def tredimplot(self,dim = [0,1,2]):
-        if self.states is None:
-            self.states()
-        states = self.states
+        if self.data is None:
+            self.data()
+        states = self.data
         fig = plt.figure()
         ax = fig.gca(projection ='3d')
         ax.plot(states[dim[0]], states[dim[1]], states[dim[2]],linewidth=0.5,alpha = 0.9)
         plt.show()
     def twodimplot(self,dim = [0,1]):
-        if self.states is None:
+        if self.data is None:
             self.states()
-        states = self.states
+        states = self.data
         plt.plot(states[dim[0]], states[dim[1]])
         plt.show()
     def onedimplot(self,dim = [0]):
-        if self.states is None:
+        if self.data is None:
             self.states()
-        states = self.states
+        states = self.data
         plt.plot(self.t,states[:,dim[0]],alpha = 0.3)
         plt.show()
-    def storeData(self,filename):
-        np.savetxt(filename+'Values.txt',self.states)
+    def storeData(self,filename = ''):
+        np.savetxt(filename+'data.txt',self.data)
         np.savetxt(filename+'Time.txt',self.t)
     def loadData(self,filename):
-        self.states = np.loadtxt(filename+'Values.txt')
+        self.data = np.loadtxt(filename+'Values.txt')
         self.t = np.loadtxt(filename+'Time.txt')
     def timepoints(self):
         return self.t
     def getData(self):
-        return self.states
+        return self.data
