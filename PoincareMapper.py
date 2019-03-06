@@ -32,6 +32,7 @@ class PoincareMapper:
     # Maps points interpolated from the data
     def map(self):
         self.values = []
+        self.intersectindx = []
         for i in range(2,len(self.data)-4):
             x1 = self.data[i]
             x2 = self.data[i+1]
@@ -39,6 +40,7 @@ class PoincareMapper:
                 #Interpolate nearest point
                 nearestPoint = self.interpolate(self.data[i-2:i+4])
                 #Add to values
+                self.intersectindx.append(i)
                 self.values.append(nearestPoint)
         return np.asarray(self.values)
 
@@ -69,6 +71,9 @@ class PoincareMapper:
     def getValues(self):
         return self.values.copy()
 
+    def getIntersctIndx(self):
+        return self.intersectindx.copy()
+
     def getPlaneNorm(self):
         return self.plane.copy()
 
@@ -81,4 +86,4 @@ class PoincareMapper:
         amplitude = []
         for vec in self.values:
             amplitude.append(func(vec))
-        return [amplitude[0:-1],amplitude[1:]]
+        return amplitude
