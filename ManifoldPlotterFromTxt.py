@@ -62,15 +62,15 @@ ax = fig.add_subplot(221, projection='3d')
 colorplot.plotSim(ax)
 ax.set_title("Original data")
 #plot plane in figure
-ylim = ax.get_ylim().astype(int)
+xlim = ax.get_xlim().astype(int)
 zlim = ax.get_zlim().astype(int)
 # Plot plane
-yy, zz = np.meshgrid(range(ylim[0],ylim[1]), range(zlim[0],zlim[1]))
-xx = (-spaceVec[1]*yy-spaceVec[2]*zz)/spaceVec[0]
-ax.plot_surface(xx, yy, zz, alpha=0.2)
+xx, zz = np.meshgrid(range(xlim[0],xlim[1]), range(zlim[0],zlim[1]))
+yy = (-spaceVec[0]*xx-spaceVec[2]*zz)/spaceVec[1]
+ax.plot_surface(xx, yy, zz, alpha=0.2,color = 'k')
 insct = np.array(intersectValues).transpose()
 # Plot intersecting points
-ax.plot(insct[0],insct[1],insct[2],color = 'red',alpha = 0.7,markersize=0.4)
+ax.plot(insct[0],insct[1],insct[2],'o',color = 'red',alpha = 0.7,markersize=0.4)
 ax.set_ylabel('y')
 ax.set_xlabel('x')
 ax.set_zlabel('z')
@@ -88,10 +88,10 @@ print('Plotting manifold')
 ax = fig.add_subplot(223)
 colorplot.plotMan(ax)
 plt.title("Data after embedding")
-left,right = ax.get_ylim()
+left,right = ax.get_xlim()
 plx = range(int(left),int(right))
 ply = planeVec[1]/planeVec[0] * plx
-ax.plot(plx,ply,'-',alpha = 0.4)
+ax.plot(plx,ply,'-',alpha = 0.3,color = 'k')
 ax.set_ylabel('y')
 ax.set_xlabel('x')
 
