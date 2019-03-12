@@ -6,10 +6,9 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 class ColorPlot:
-    def __init__(self,simFile = 'simData.txt',manFile = 'manData.txt', seglen = 10, simData = [], manData = []):
+    def __init__(self,simFile = 'simData.txt',manFile = 'manData.txt', seglen = 10, simData = [], manData = [],c = 'coolwarm'):
         # Check types
         #if not (simFile is str & manFile is str & seglen is int):
-        #    raise Exception('Wrong types')
         # Load simData and construct colormap on criteria of warmth
         if( manData == [] or simData == []):
             self.simData = np.loadtxt(simFile)
@@ -17,7 +16,7 @@ class ColorPlot:
         else:
             self.manData = manData
             self.simData = simData
-        col = cm.get_cmap('coolwarm')
+        col = cm.get_cmap(c)
         normalize = colors.Normalize(vmin=min(self.simData[2]), vmax=max(self.simData[2]))
         self.colors = [col(normalize(value)) for value in self.simData[2]]
         # Load manifolddata.

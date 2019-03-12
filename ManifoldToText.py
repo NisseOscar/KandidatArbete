@@ -6,7 +6,6 @@ from scipy.integrate import odeint
 
 # This import is needed to modify the way figure behaves
 from mpl_toolkits.mplot3d import Axes3D
-Axes3D
 from sklearn import manifold, datasets
 from Simulator import Simulator
 from PoincareMapper import PoincareMapper
@@ -22,16 +21,16 @@ sim = Simulator(eq)
 angles = np.linspace(0,2*np.pi,8)
 
 print("Integrating data")
-data = sim.states(duration=500)[10000:]
+data = sim.states(duration=500,split = 0.04)[2000:]
 np.savetxt('data.txt',data)
 
 
 print("Computing embedding of data")
-embedding= manifold.TSNE(n_components=2, init='pca', random_state=0)
-manifoldData = embedding.fit_transform(data)
-np.savetxt('TSNEData.txt',manifoldData)
+embedding= manifold.LocallyLinearEmbedding(n_neighbors = 9, n_components=2,method = 'ltsa',eigen_solver='auto').fit_transform(data)
+#manifoldData = embedding.fit_transform(data)
+np.savetxt('LTSAData.txt',embedding)
 print(len(data))
-print(len(manifoldData))
+print(len(embedding))
 
 
 # Modified provides a smoother manifold, the return map still sucks

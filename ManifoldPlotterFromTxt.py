@@ -13,11 +13,11 @@ import Equation
 import math
 import numpy as np
 
-start = 1000;
+start = 0
 # Initiate arrays
 print('Loading data')
-manData = np.loadtxt('TSNEData.txt')[start:]
-simData = np.loadtxt('Data.txt')
+manData = np.loadtxt('LTSAData.txt')[start::1]
+simData = np.loadtxt('Data.txt')[0::1]
 simData = (simData[start:]).T
 
 # Colormapper
