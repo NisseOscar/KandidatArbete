@@ -15,17 +15,19 @@ import numpy as np
 
 start = 0
 # Initiate arrays
+# Important that they are the same size.
 print('Loading data')
-manData = np.loadtxt('LTSAData.txt')[start::1]
-simData = np.loadtxt('Data.txt')[0::1]
-simData = (simData[start:]).T
+manData = np.loadtxt('LTSAData.txt')
+simData = np.loadtxt('Data.txt')
+simData = simData.T
+
 
 # Colormapper
 print('Constructing colorschema' )
 colorplot = ColorPlot(manData = manData, simData = simData)
 colormap = colorplot.getColorMap()
 
-# Create manifolder for poincare maps
+# Create manifolder for poincare mapsb
 print('Creating embedding')
 embedding= manifold.TSNE(n_components=1, init='pca', random_state=0)
 
@@ -45,9 +47,7 @@ manifoldMapper = PoincareMapper(planeVec,manData,direction = 1)
 
 # Create returnmap of poincare sectionand conduct the manifold on it.
 print('Constructing plane intersections')
-def func(arr):
-    return arr[2]
-returnMapData = dataMapper.iterationdifference(func = func)
+returnMapData = dataMapper.iterationdifference()
 intersectValues =dataMapper.getValues()
 returnMapOfManifold = manifoldMapper.iterationdifference()
 intsctIndx = dataMapper.getIntersctIndx()
@@ -83,9 +83,13 @@ plt.title("Return map of Poincare map")
 ax.set_ylabel('z1')
 ax.set_xlabel('z0')
 
+
+manintsct = np.array([manData[i] for i in intsctIndx])
+
 # Data after manifold
 print('Plotting manifold')
 ax = fig.add_subplot(223)
+ax.plot(manintsct[:,0],manintsct[:,1],'o', color = 'red', markersize = 0.6,alpha = 0.9)
 colorplot.plotMan(ax)
 plt.title("Data after embedding")
 left,right = ax.get_xlim()

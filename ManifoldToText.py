@@ -21,12 +21,13 @@ sim = Simulator(eq)
 angles = np.linspace(0,2*np.pi,8)
 
 print("Integrating data")
-data = sim.states(duration=500,split = 0.04)[2000:]
-np.savetxt('data.txt',data)
+data = sim.states(duration=500,split = 0.2)[2000:]
+np.savetxt('Data.txt',data)
 
 
 print("Computing embedding of data")
 embedding= manifold.LocallyLinearEmbedding(n_neighbors = 9, n_components=2,method = 'ltsa',eigen_solver='auto').fit_transform(data)
+#embedding= manifold.TSNE(n_components=2,init= 'pca').fit_transform(data)
 #manifoldData = embedding.fit_transform(data)
 np.savetxt('LTSAData.txt',embedding)
 print(len(data))
