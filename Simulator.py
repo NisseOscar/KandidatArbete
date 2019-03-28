@@ -70,15 +70,15 @@ class Simulator:
         values2 = np.array(values2)
         s2 = np.linspace(s[0],s[-1],round(len(s)/2))
         interpedData = []
-        for dim in [0,1,2]:
+        for dim in range(0,len(values2[0,:])):
             data = np.array(values2[:,dim]).reshape(len(s),1).squeeze()
             dimData = []
             s2Index = 0
             lastIndex = 0
             for i, value in enumerate(data):
-                if i % 10 == 0 and i+10 < len(s):
-                    tck, u = spl(np.array(data[i:i+9]).reshape(1,9),u = np.array(s[i:i+9]).reshape(9,1).flatten(),k = 5)
-                    while s2[s2Index] < s[i+9]:
+                if i % 5 == 0 and i+5 < len(s):
+                    tck, u = spl(np.array(data[i:i+6]).reshape(1,6),u = np.array(s[i:i+6]).reshape(6,1).flatten(),k = 5)
+                    while s2[s2Index] < s[i+5]:
                         s2Index +=1
                     if s2Index != lastIndex:
                         newValues = splev(s2[lastIndex:s2Index],tck)
