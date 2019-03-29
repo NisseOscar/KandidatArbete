@@ -58,33 +58,37 @@ class Simulator:
         values = np.array(self.data)
         np.swapaxes(values,1,0)
         s = []
-        values2 =[]
         lastPoint = values[:,0]
         lastS = 0
         for i, point in enumerate(values[0]):
             point = values[:,i]
             lastS = math.sqrt(np.dot(np.array(point-lastPoint),np.array(point-lastPoint)))+lastS
             s.append(lastS)
-            values2.append(point)
             lastPoint = point
-        values2 = np.array(values2)
-        s2 = np.linspace(s[0],s[-1],round(len(s)/2))
+        s2 = np.linspace(s[0],s[-1],len(s))
         interpedData = []
-        for dim in range(0,len(values2[0,:])):
-            data = np.array(values2[:,dim]).reshape(len(s),1).squeeze()
+        for dim in range(0,len(values[:,1])):
+            data = np.array(values[dim,:]).reshape(len(s),1).squeeze()
             dimData = []
             s2Index = 0
             lastIndex = 0
             for i, value in enumerate(data):
-                if i % 5 == 0 and i+5 < len(s):
-                    tck, u = spl(np.array(data[i:i+6]).reshape(1,6),u = np.array(s[i:i+6]).reshape(6,1).flatten(),k = 5)
-                    while s2[s2Index] < s[i+5]:
-                        s2Index +=1
-                    if s2Index != lastIndex:
-                        newValues = splev(s2[lastIndex:s2Index],tck)
+                if i % 5 == 0 and i+5 <= len(s):
+                    if i+5 == len(s):
+                        tck, u = spl(np.array(data[i-2:i+4]).reshape(1,6),u = np.array(s[i-2:i+4]).reshape(6,1).flatten(),k = 5)
+                        newValues = splev(s2[lastIndex:-1],tck)
                         for xi in newValues:
                             for xij in xi:
                                 dimData.append(xij)
+                    else:
+                        tck, u = spl(np.array(data[i:i+6]).reshape(1,6),u = np.array(s[i:i+6]).reshape(6,1).flatten(),k = 5)
+                        while s2[s2Index] < s[i+5]:
+                            s2Index +=1
+                        if s2Index != lastIndex:
+                            newValues = splev(s2[lastIndex:s2Index],tck)
+                            for xi in newValues:
+                                for xij in xi:
+                                    dimData.append(xij)
                     lastIndex = s2Index
             interpedData.append(dimData)
         interpedData = np.array(interpedData)
