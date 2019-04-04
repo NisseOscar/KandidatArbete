@@ -24,10 +24,10 @@ simData = simData.T
 
 # Colormapper
 print('Constructing colorschema' )
-colorplot = ColorPlot(manData = manData, simData = simData)
+colorplot = ColorPlot(simData = simData)
 colormap = colorplot.getColorMap()
 
-# Create manifolder for poincare mapsb
+# Create manifolder for poincare col
 print('Creating embedding')
 embedding= manifold.TSNE(n_components=1, init='pca', random_state=0)
 
@@ -59,7 +59,7 @@ fig = plt.figure()
 # Original simulation data
 print('Plotting Rossler equation')
 ax = fig.add_subplot(221, projection='3d')
-colorplot.plotSim(ax)
+colorplot.d3plot(ax,data = simData.T)
 ax.set_title("Original data")
 #plot plane in figure
 xlim = ax.get_xlim().astype(int)
@@ -90,7 +90,7 @@ manintsct = np.array([manData[i] for i in intsctIndx])
 print('Plotting manifold')
 ax = fig.add_subplot(223)
 ax.plot(manintsct[:,0],manintsct[:,1],'o', color = 'red', markersize = 0.6,alpha = 0.9)
-colorplot.plotMan(ax)
+colorplot.d2plot(ax,data = manData.T)
 plt.title("Data after embedding")
 left,right = ax.get_xlim()
 plx = range(int(left),int(right))

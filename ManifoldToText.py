@@ -21,7 +21,7 @@ sim = Simulator(eq)
 angles = np.linspace(0,2*np.pi,8)
 
 print("Integrating data")
-data = sim.states(duration=500,split = 0.2)[2000:]
+data = sim.states(duration=400,split = 0.05)[2000:]
 np.savetxt('Data.txt',data)
 
 

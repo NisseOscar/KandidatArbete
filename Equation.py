@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
+import math
 
 class function(ABC):
     @abstractmethod
@@ -37,8 +38,11 @@ class Rossler(function):
 
     def inCond(self):
         return [1.0,1.0,1.0]
-    def jacobian(self,state,t):
-        return
+    def equalibriumpoints(self):
+        d = math.sqrt(self.c*self.c-4*self.a*self.b)
+        return [1/2* np.array([self.c-d,(d-self.c)/self.a,(self.c-d)/self.a]),1/2* np.array([self.c+d,(-self.c-d)/self.a,(self.c+d)/self.a])]
+    def jacobian(self,point):
+        return np.matrix([[0,-1,-1],[1,self.a,0],[point[2],0,point[0]-self.c]])
 
 class Fitz(function):
     def __init__(self,n=2,a = -0.02651,c=0.02,b = None,A = None,k=0.00128):
