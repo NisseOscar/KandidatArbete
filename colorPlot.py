@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 class ColorPlot:
-    def __init__(self,simFile = 'simData.txt', seglen = 10, simData = [],c = 'coolwarm'):
+    def __init__(self,simFile = 'simData.txt', seglen = 10, simData = [],c = 'plasma'):
 
         # Load simData and construct colormap on criteria of warmth
         if(simData == []):
