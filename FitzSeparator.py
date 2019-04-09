@@ -8,6 +8,8 @@ import Equation
 import math
 from scipy.integrate import odeint
 from FitzSimulator import FitzSimulator
+import matplotlib.cm as cm
+import matplotlib.colors as colors
 
 
 newData = True
@@ -24,9 +26,10 @@ if newData:
 
     mapper = PoincareMapper(normalVector,data)
     poincareSection = mapper.getValues()
+    interindxes = mapper.getIntersctIndx()
 
     for point in poincareSection:
-        if 
+        if
 
     print("Computing LLE embedding of return map")
     manifoldOfPoincareSection, err = manifold.locally_linear_embedding(poincareSection,n_neighbors=8,n_components=2,method = 'modified') # return map then manifold
@@ -38,6 +41,12 @@ else:
     data = np.loadtxt('DataFitz.txt')
     manifoldOfPoincareSection = np.loadtxt('ManifoldOfPoincareFitz.txt')
 
+## Fix colors for Plot
+col = col = cm.get_cmap('plasma')
+normdata = [np.linalg.norm(point) for point in data]
+normalize = colors.Normalize(vmin=min(normdata), vmax=max(normdata))
+dataColors = [col(normalize(value)) for value in self.simData[2]]
+poincColor = [dataColors[i] for i in interindxes]
 
 fig = plt.figure()
 
@@ -51,6 +60,6 @@ ax.plot(data[:,1],data[:,3])
 
 ax = fig.add_subplot(133)
 ax.set_title('Reembedded Poincaré Section')
-ax.scatter(manifoldOfPoincareSection[:,0],manifoldOfPoincareSection[:,1])
+ax.scatter(manifoldOfPoincareSection[:,0],manifoldOfPoincareSection[:,1],c = poincColor)
 
 plt.show()
