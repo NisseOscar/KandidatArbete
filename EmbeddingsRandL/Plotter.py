@@ -24,7 +24,7 @@ lorcolors = [col(lornorm(value)) for value in lorentz.T[2]]
 rossnorm = colors.Normalize(vmin=min(rossler.T[2]), vmax=max(rossler.T[2]))
 rosscolors = [col(lornorm(value)) for value in rossler.T[2]]
 
-# Plot original datasets
+################################ Plot original datasets #################################
 # fig = plt.figure()
 # axlor = plt.subplot(121,projection = '3d')
 # axros = plt.subplot(122,projection = '3d')
@@ -34,7 +34,7 @@ rosscolors = [col(lornorm(value)) for value in rossler.T[2]]
 # axlor.plot(lorentz[:,0],lorentz[:,1],lorentz[:,2],linewidth=0.7,alpha = 0.8)
 # plt.show()
 
-# Plot each to the average color of the segment
+################################# Plot with Color ######################################
 # seglen = 5
 # for file in files:
 #     lorentzemb = np.loadtxt('./datafiles/'+file[0])
