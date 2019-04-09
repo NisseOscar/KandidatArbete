@@ -62,11 +62,13 @@ class PoincareMapper:
         curve = splev(np.linspace(0,1,1000),tck)
         curve = np.array(curve).transpose()
         min = self.disPlan(curve[0])
+        minPoint = 0
         for point in curve:
             tmp = self.disPlan(point)
-            if(min>self.disPlan(point)):
+            if(min>tmp):
                 min = tmp
-        return point
+                minPoint = point
+        return minPoint
 
     def getValues(self):
         return self.values.copy()
