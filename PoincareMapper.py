@@ -27,7 +27,7 @@ class PoincareMapper:
 
     # distance to plane of a point
     def disPlan(self,x):
-        return np.dot(x,self.plane)
+        return abs(np.dot(x,self.plane))
 
     # Maps points interpolated from the data
     def map(self):
@@ -37,9 +37,7 @@ class PoincareMapper:
             x1 = self.data[i]
             x2 = self.data[i+1]
             if(self.crossing(x1,x2) and (np.dot(self.plane,x1)*self.direction > 0)):
-                #Interpolate nearest point
                 nearestPoint = self.interpolate(self.data[i-2:i+4])
-                #Add to values
                 self.intersectindx.append(i)
                 self.values.append(nearestPoint)
         return np.asarray(self.values)
@@ -52,13 +50,10 @@ class PoincareMapper:
         else:
             return points[1:]
 
-    #Interpolate by the 5th order
+    # Interpolate by the 5th order
     def interpolate(self, crossingPoints):
-        points = self.closestPoints(crossingPoints)
-        points = points.transpose()
+        points = crossingPoints.transpose()
         tck,u = spl(points,k=5)
-        # From our splines we calculate the approximate vactor and iterate to the closest point.
-        # Could be done through newton raphosdy, not sure.
         curve = splev(np.linspace(0,1,1000),tck)
         curve = np.array(curve).transpose()
         min = self.disPlan(curve[0])
