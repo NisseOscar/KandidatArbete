@@ -22,7 +22,9 @@ class FitzSimulator:
         if(A is None):
             self.A = np.ones((n,n))-np.identity(n)
         if(b is None):
-            self.b = np.linspace(0.0065,0.0135,n)
+            self.b = np.linspace(0.006,0.014,n)
+        else:
+            self.b = b;            
         if inCond is None:
             self.inCond = 0.01001*np.ones(2*self.n)
         else:
@@ -36,7 +38,7 @@ class FitzSimulator:
     def f(self,state,t):
         x = state[0:self.n]
         y = state[self.n:2*self.n]# unpack the state vecto
-        xdot = np.multiply(x,np.multiply(self.a-x,x-np.ones(self.n)))-y+self.k*(np.matmul(self.A,x)-x)
+        xdot = np.multiply(x,np.multiply(self.a-x,x-np.ones(self.n)))-y+self.k*(np.matmul(self.A,x)-(self.n-1)*x) # Global coupling only
         y = np.multiply(self.b,x)-np.multiply(self.c,y)
         state[0:self.n] = xdot
         state[self.n:2*self.n] = y
