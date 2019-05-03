@@ -1,4 +1,3 @@
-import Equation
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,7 +29,7 @@ class FitzSimulator:
 
     def states(self, duration = 1000, split = 0.1, rtol = 1.49012e-8, atol = 1.49012e-8):
         self.t = np.arange(0,duration, split)
-        self.states = odeint(self.f,self.inCond,self.t, rtol = rtol, atol = atol)
+        self.states = odeint(self.f,self.inCond,self.t, rtol = rtol, atol = atol,full_output=0)
         return self.states
 
     def f(self,state,t):

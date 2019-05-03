@@ -6,11 +6,11 @@ import matplotlib.colors as colors
 import matplotlib.animation as animation
 from matplotlib.ticker import NullFormatter
 
-manifold = np.loadtxt('Fitz4DManifold.txt')
+manifold = np.loadtxt('./FitzFilesO/Fitz4DManifold.txt')
 
 rMap = np.array([[manifold[i,0],manifold[i+1,0]] for i in range(0,len(manifold)-1)])
 
-arr0 = manifold[:,0]
+arr0 = np.array(manifold[:,0])
 axis = 0
 
 def maxfunc(arr):

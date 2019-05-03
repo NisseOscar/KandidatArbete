@@ -14,7 +14,7 @@ import json
 print('loading data')
 data = np.loadtxt('DataFitz.txt')
 poincareSection = np.loadtxt('Fitz4DPoincare.txt')
-extremeEvents = np.array([i for i, point in enumerate(poincareSection) if(np.linalg.norm(point)>=0.1)])
+extremeEvents = np.array([i for i, point in enumerate(poincareSection) if(np.linalg.norm(point)>=0.12)])
 manifoldOfPoincareSection = np.loadtxt('Fitz4DManifold.txt')
 
 print('Generate containers')
@@ -33,14 +33,12 @@ segments = np.concatenate((segmentsl,segmentsr[1:]))
 totsequenze = [sum(p<segments) for p in y]
 print(totsequenze)
 print('Count extreme segments')
-extrmsequze = []
-freq = {}
 for i in extremeEvents:
-    previus = [y[i-j] for j in range(0,5)]
+    previus = [y[i-j] for j in range(0,10)]
     sections = [sum(p<segments) for p in previus]
     sqnz =  0
-    for i,p in enumerate(previus):
-        sqnz = [sqnz + sum(p<segments)*math.pow(10,i)]
+    for j,p in enumerate(previus):
+        sqnz = [sqnz + sum(p<segments)*math.pow(10,j)]
     if (sqnz in freq):
         freq[sqnz] += 1
     else:

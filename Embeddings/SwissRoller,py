@@ -1,0 +1,30 @@
+import numpy as np
+from sklearn import manifold, datasets
+#from ../colorPlot import ColorPlot
+import math
+import numpy as np
+n = 1500
+print('constructing swiss roll')
+roll = datasets.make_swiss_roll(n)
+np.savetxt('SwissRollData.txt',roll[0])
+np.savetxt('SRcolor.txt',roll[1])
+roll = roll[0]
+
+methods = ['standard', 'ltsa', 'hessian', 'modified']
+for method in methods:
+    print('Constructing embedding')
+    emb = manifold.LocallyLinearEmbedding(n_neighbors = 10, n_components=2,method = method,eigen_solver='auto').fit_transform(roll)
+    print('Saving')
+    np.savetxt('./SwissRoll/LLE'+method+'SR.txt', emb)
+
+print('Doing Tsne embedding')
+emb = manifold.TSNE(n_components=2, init='pca', random_state=0).fit_transform(roll)
+np.savetxt('./SwissRoll/TSNESR.txt', emb)
+
+print('Doing MDS embedding')
+emb =  manifold.MDS(2, max_iter=100, n_init=1).fit_transform(roll)
+np.savetxt('./SwissRoll/MDSSR.txt', emb)
+
+print('Doing Isomap embedding')
+emb =   manifold.Isomap(12,2).fit_transform(roll)
+np.savetxt('./SwissRoll/ISOSR.txt', emb)

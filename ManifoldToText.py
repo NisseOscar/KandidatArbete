@@ -18,12 +18,11 @@ import numpy as np
 eq = Equation.Rossler()
 sim = Simulator(eq)
 
-angles = np.linspace(0,2*np.pi,8)
 
 print("Integrating data")
-data = sim.states(duration=400.04,split = 0.04)[2000:]
-data = sim.interpolateCurve()
-np.savetxt('RosslerData.txt',data)
+data = sim.states(duration=400.1,split = 0.1)[1000:]
+data = sim.interpolateCurve()[1000:]
+np.savetxt('./Embeddings/DifferentResults/RosslerData1.txt',data)
 
 
 # print("Computing embedding of data")
@@ -32,7 +31,6 @@ np.savetxt('RosslerData.txt',data)
 # #manifoldData = embedding.fit_transform(data)
 # np.savetxt('LTSALorentz.txt',embedding)
 print(len(data))
-print(len(embedding))
 
 
 # Modified provides a smoother manifold, the return map still sucks
