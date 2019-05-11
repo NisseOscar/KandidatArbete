@@ -9,7 +9,7 @@ data = np.transpose(np.array([data[:-1,0], data[1:,0]]))
 
 nb = GraphSeparetor(data, 40)
 #nb.constructTrajectories()
-nb.SeperateGraphs(True, 0.006, 0.1, 0.0005, 70,  0.005)
+nb.SeperateGraphs(True, 0.00018, 0.1, 0.0005, 60)
 #nb.constructTrajectories()
 #symbols = nb.SeperateGraphs(colPlot = True)
 #print(symbols)
