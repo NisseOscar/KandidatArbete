@@ -1,11 +1,11 @@
 from GraphSeparetor import *
 import numpy as np
 #
-data = np.loadtxt('Fitz4DManifold.txt')
+data = np.loadtxt('data2.txt')
 
 
 #data[:,1] = 5 *data[:,1]
-data = np.transpose(np.array([data[:-1,0], data[1:,0]]))
+data = np.transpose(np.array([data[:-1], data[1:]]))
 
 nb = GraphSeparetor(data, 40)
 #nb.constructTrajectories()
